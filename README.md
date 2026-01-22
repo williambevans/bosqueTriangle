@@ -1,29 +1,87 @@
-# Bosque County Parcel Scraper
+<div align="center">
 
-**Central Texas Integrated Energy & Compute Zone**
+# 🌍 Bosque County Parcel Scraper
 
-Professional-grade Python scraper and web visualization for Bosque County, Texas parcel data. Extracts parcels within the triangle bounded by Highway 22, Highway 6, and the McLennan County line. Tracks solar development status, active leases, and open land for strategic real estate analysis.
+### Central Texas Integrated Energy & Compute Zone
 
-## Overview
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-success)](https://williambevans.github.io/bosqueTriangle/)
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen)]()
 
-This project provides:
-- **Automated Parcel Extraction** from TNRIS Statewide Parcels ArcGIS REST API
-- **Solar Development Tracking** (solar developed, active leases, open land)
-- **Interactive Web Map** with dark theme and gold accents matching investment presentation style
-- **Progress Visualization** showing land development status
-- **Multiple Export Formats** (JSON, GeoJSON, CSV)
-- **Subdivision Grouping** for plat-level analysis
+**Professional-grade** Python scraper and interactive web visualization for Bosque County, Texas parcel data. Track solar development, active leases, and open land across **130,000 acres** of strategic energy corridor.
 
-## Target Area
+[View Live Demo](https://williambevans.github.io/bosqueTriangle/) • [Documentation](#-documentation) • [Quick Start](#-quick-start)
 
-**Coordinates (WGS84):**
-- Clifton (Southwest): -97.5769, 31.7823
-- Lake Whitney (North): -97.3618, 31.9508
-- McLennan County/Hwy 6 (Southeast): -97.2891, 31.7234
+---
 
-**Total Coverage:** ~130,000 acres in Bosque County, TX
+</div>
 
-## Quick Start
+## ✨ Features
+
+<table>
+<tr>
+<td>
+
+**🗺️ Interactive Map**
+- Dark-themed professional interface
+- Real-time parcel visualization
+- Development phase overlays
+- POI markers & transmission lines
+
+</td>
+<td>
+
+**⚡ Solar Tracking**
+- Solar developed parcels
+- Active lease identification
+- Open land analysis
+- Progress visualization
+
+</td>
+</tr>
+<tr>
+<td>
+
+**📊 Data Export**
+- JSON (nested structure)
+- GeoJSON (QGIS compatible)
+- CSV (spreadsheet analysis)
+- GitHub Pages deployment
+
+</td>
+<td>
+
+**🔧 Developer Tools**
+- ArcGIS REST API scraper
+- Automated endpoint discovery
+- Field mapping system
+- Rate limiting & retries
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🎯 Target Area
+
+```
+┌─────────────────────────────────────────────┐
+│  Clifton (SW):     -97.5769, 31.7823       │
+│  Lake Whitney (N): -97.3618, 31.9508       │
+│  McLennan/Hwy 6:   -97.2891, 31.7234       │
+│                                             │
+│  Coverage: ~130,000 acres                  │
+│  County: Bosque, Texas                     │
+└─────────────────────────────────────────────┘
+```
+
+**Bounded by:** Highway 22 • Highway 6 • McLennan County Line
+
+---
+
+## 🚀 Quick Start
 
 ### Installation
 
@@ -32,76 +90,109 @@ This project provides:
 git clone https://github.com/williambevans/bosqueTriangle.git
 cd bosqueTriangle
 
-# Install Python dependencies
+# Install dependencies
 pip install -r requirements.txt
 
-# Install browser for Playwright (fallback only)
+# Optional: Install Playwright for browser scraping
 playwright install chromium
 ```
 
-### Run Small Test
-
-Test with a limited area first:
+### Run Test Scraper
 
 ```bash
+# Test with small area (~50 parcels)
 python test_scraper.py
 ```
 
-This fetches 10-50 parcels around Clifton for validation.
+**Output:** Creates `docs/data/parcels.geojson` for GitHub Pages
 
-### Full Scrape
-
-Extract all parcels in target triangle:
-
-```bash
-python scraper.py
-```
-
-Output files saved to `output/` directory:
-- `bosque_parcels_YYYYMMDD_HHMMSS.json` - Full nested data
-- `bosque_parcels_YYYYMMDD_HHMMSS.geojson` - For QGIS/mapping
-- `bosque_plat_summary_YYYYMMDD_HHMMSS.csv` - Spreadsheet summary
-
-### Launch Web Viewer
+### Launch Web Interface
 
 **Option 1: GitHub Pages (Recommended)**
 
-The site is automatically deployed to GitHub Pages at:
-**https://williambevans.github.io/bosqueTriangle/**
+🌐 **Live Site:** https://williambevans.github.io/bosqueTriangle/
 
-To update the data:
-1. Run `python test_scraper.py` or `python scraper.py`
-2. Commit and push the generated `docs/data/parcels.geojson`
-3. Site updates automatically
+To update data:
+```bash
+python scraper.py               # Generate new data
+git add docs/data/parcels.geojson
+git commit -m "Update parcel data"
+git push                        # Site updates in ~2 min
+```
 
 **Option 2: Local Flask Server**
 
-View locally with Flask:
-
 ```bash
 python web_server.py
+# Open: http://localhost:5000
 ```
 
-Open browser to: **http://localhost:5000**
+### Full Scrape
 
-## Project Structure
+```bash
+# Extract all parcels in target triangle
+python scraper.py
+```
+
+---
+
+## 📂 Project Structure
 
 ```
 bosqueTriangle/
-├── config.json              # Configuration and target polygon
-├── scraper.py              # Main ArcGIS REST scraper
-├── test_scraper.py         # Small area test scraper
-├── discover_endpoint.py    # Auto-detect GIS endpoints
-├── browser_scraper.py      # Playwright fallback (template)
-├── web_server.py           # Flask web server
-├── web/
-│   └── index.html         # Interactive map viewer
-├── output/                # Generated data files
-├── requirements.txt       # Python dependencies
-└── README.md             # This file
+├── 📊 scraper.py              # Main ArcGIS REST scraper
+├── 🧪 test_scraper.py         # Small area test
+├── 🔍 discover_endpoint.py    # Endpoint auto-detection
+├── 🌐 web_server.py           # Flask development server
+├── 🎭 browser_scraper.py      # Playwright fallback
+├── ⚙️  config.json             # Configuration & polygon
+├── 📦 requirements.txt        # Python dependencies
+│
+├── 📄 docs/                   # GitHub Pages site
+│   ├── index.html            # Interactive map interface
+│   ├── _config.yml           # Pages configuration
+│   └── data/
+│       ├── parcels.geojson   # Generated parcel data
+│       └── infrastructure.geojson  # Phases, POIs, substations
+│
+└── 📁 output/                 # Timestamped exports
+    ├── bosque_parcels_*.json
+    ├── bosque_parcels_*.geojson
+    └── bosque_plat_summary_*.csv
 ```
 
-## Data Model
+---
+
+## 🗺️ Web Interface
+
+<div align="center">
+
+### Professional Investment Presentation Design
+
+![Dark Theme](https://img.shields.io/badge/Theme-Dark%20%231a1a1a-black?style=for-the-badge)
+![Gold Accents](https://img.shields.io/badge/Accents-Gold%20%23c4a661-yellow?style=for-the-badge)
+![Mobile Ready](https://img.shields.io/badge/Mobile-Responsive-blue?style=for-the-badge)
+
+</div>
+
+**Features:**
+- 🎨 H.H.H. Holdings branded header
+- 📍 **Development Phases** (Phase 1, 2, 4) with capacity labels
+- ⚡ **POI Markers** (orange circles) showing power generation points
+- 💎 **Substations** (green diamonds) - Clifton Sub, Whitney Sub
+- 📦 **Central Collectors** (dashed squares) - Proposed 345kV
+- 🔌 **Transmission Lines** (cyan/orange) - 345kV and 138kV
+- 📊 **Progress Bars** - Solar Developed, Active Leases, Open Land
+- 🔍 **Click parcels** for owner, acreage, status details
+
+**Color Coding:**
+- 🟨 **Gold** - Solar developed parcels
+- ⬜ **Gray** - Active leases
+- ⬛ **Dark Gray** - Open land
+
+---
+
+## 📊 Data Model
 
 ### Parcel Object
 
@@ -118,287 +209,314 @@ bosqueTriangle/
   "acreage": 10.5,
   "market_value": "125000",
   "status": "open",
-  "geometry": {
-    "type": "Polygon",
-    "coordinates": [[...]]
-  }
+  "geometry": { "type": "Polygon", "coordinates": [[...]] }
 }
 ```
 
 ### Status Values
 
-- **`solar_developed`** - Owned by solar/energy company
-- **`active_lease`** - Lease or option mentioned in legal description
-- **`open`** - Available land (no solar development or lease)
+| Status | Description | Map Color |
+|--------|-------------|-----------|
+| `solar_developed` | Owned by solar/energy company | 🟨 Gold (#c4a661) |
+| `active_lease` | Lease or option agreement | ⬜ Gray (#808080) |
+| `open` | Available land | ⬛ Dark Gray (#404040) |
 
-### Plat Object
+### Infrastructure Features
 
 ```json
 {
-  "name": "Clifton Ranch Estates",
-  "total_parcels": 47,
-  "total_acreage": 523.8,
-  "solar_developed": 2,
-  "active_leases": 8,
-  "open_land": 37,
-  "parcels": [...]
+  "phases": ["PHASE 1: 3342 MW", "PHASE 2: 3342 MW", "PHASE 4: 2705 MW"],
+  "pois": ["POI-1: 3342V", "POI-2: 345kV", "POI-3: 345kV", "POI-4: 138kV"],
+  "substations": ["CLIFTON SUB: 138kV", "WHITNEY SUB: 345kV/138kV"],
+  "collectors": ["CENTRAL COLLECTOR: Proposed 345kV"],
+  "transmission": ["345kV Lines", "138kV Lines"]
 }
 ```
 
-## Data Sources
+---
+
+## 🌐 Data Sources
 
 ### Primary: TNRIS Statewide Parcels
 
 **URL:** https://feature.stratmap.tnris.org/arcgis/rest/services/Parcels/StratMap_Parcels/MapServer/0
 
-**Type:** ArcGIS REST API
-**Coverage:** Statewide Texas parcels
-**Update Frequency:** Quarterly
+- **Type:** ArcGIS REST API
+- **Coverage:** Statewide Texas parcels
+- **Update:** Quarterly
+- **Format:** GeoJSON
 
 ### Fallback: Bosque CAD
 
 **URL:** https://esearch.bosquecad.com/
 
-**Type:** Web scraper (requires configuration)
-**Note:** Use if ArcGIS REST API unavailable
+- **Type:** Web scraper (Playwright)
+- **Note:** Requires configuration
 
-## Field Mappings
+---
 
-The scraper handles variations in field names:
-
-| Standard Field | Variations |
-|---------------|-----------|
-| Parcel ID | `PARCEL_ID`, `ParcelID`, `PIN`, `GEO_ID`, `PROP_ID` |
-| Owner | `OWNER`, `OWNER_NAME`, `OwnerName` |
-| Acreage | `ACRES`, `Acreage`, `GIS_ACRES` |
-| Subdivision | `SUBDIV`, `SUBDIVISION`, `SUB_NAME`, `PLAT_NAME` |
-| Address | `SITUS_ADDR`, `SITUS_ADDRESS`, `SitusAddress` |
-
-## ArcGIS Query Pattern
-
-```python
-params = {
-    'where': '1=1',
-    'geometry': json.dumps(polygon),
-    'geometryType': 'esriGeometryPolygon',
-    'spatialRel': 'esriSpatialRelIntersects',
-    'inSR': '4326',
-    'outSR': '4326',
-    'outFields': '*',
-    'returnGeometry': 'true',
-    'f': 'geojson',
-    'resultOffset': 0,
-    'resultRecordCount': 1000
-}
-```
-
-## GitHub Pages Deployment
-
-This project is configured for automatic deployment to GitHub Pages.
-
-### Setup
-
-1. **Enable GitHub Pages** in your repository settings:
-   - Go to Settings → Pages
-   - Source: Deploy from branch
-   - Branch: `main` (or your default branch)
-   - Folder: `/docs`
-   - Save
-
-2. **Run the scraper** to generate data:
-   ```bash
-   python test_scraper.py  # or python scraper.py
-   ```
-
-3. **Commit and push** the generated data:
-   ```bash
-   git add docs/data/parcels.geojson
-   git commit -m "Add parcel data"
-   git push
-   ```
-
-4. **Access your site**:
-   - URL: `https://[username].github.io/bosqueTriangle/`
-   - Example: https://williambevans.github.io/bosqueTriangle/
-
-### Updating Data
-
-To refresh the map with new parcel data:
-
-```bash
-# Re-run scraper
-python scraper.py
-
-# Push updates
-git add docs/data/parcels.geojson
-git commit -m "Update parcel data"
-git push
-```
-
-Site updates automatically within 1-2 minutes.
-
-## Configuration
+## ⚙️ Configuration
 
 Edit `config.json` to customize:
-
-- **Target polygon coordinates**
-- **Data source URLs**
-- **Rate limiting** (default: 0.5s between requests)
-- **Pagination** (default: 1000 records per request)
-- **Field mappings** for different data sources
-
-## Web Interface
-
-### Styling
-
-The web interface matches professional investment presentation design:
-
-- **Dark theme** (#1a1a1a background)
-- **Gold accents** (#c4a661) for emphasis
-- **Serif typography** (Georgia) for elegance
-- **Progress bars** showing development status
-- **Interactive map** with parcel details on click
-
-### Features
-
-- Real-time statistics display
-- Color-coded parcels by status:
-  - **Gold** - Solar developed
-  - **Gray** - Active leases
-  - **Dark gray** - Open land
-- Click parcels for detailed information
-- Responsive design for mobile/tablet
-
-## Use Cases
-
-This tool supports:
-
-1. **Data Center Corridor Analysis** - Identify ownership patterns along transmission corridors
-2. **Solar Development Tracking** - Monitor solar farm development and leasing activity
-3. **Land Aggregation** - Find clusters of open land for acquisition
-4. **Transmission Easements** - Map potential easement routes
-5. **County Transparency** - Public record access and analysis
-6. **Investment Due Diligence** - Property research for real estate transactions
-
-## Advanced Usage
-
-### Discover New Endpoints
-
-Find alternative GIS service endpoints:
-
-```bash
-python discover_endpoint.py
-```
-
-### Custom Polygon
-
-Edit `config.json` to change target area:
 
 ```json
 {
   "target_polygon": {
     "type": "Polygon",
-    "coordinates": [
-      [
-        [-97.58, 31.78],
-        [-97.56, 31.80],
-        [-97.54, 31.78],
-        [-97.58, 31.78]
-      ]
-    ]
+    "coordinates": [[[lon, lat], ...]]
+  },
+  "scraper_settings": {
+    "rate_limit_seconds": 0.5,
+    "max_records_per_request": 1000,
+    "retry_attempts": 3,
+    "timeout_seconds": 30
+  },
+  "field_mappings": {
+    "parcel_id": ["PARCEL_ID", "PIN", "GEO_ID"],
+    "owner": ["OWNER", "OWNER_NAME"],
+    "acreage": ["ACRES", "GIS_ACRES"]
   }
+}
+```
+
+---
+
+## 🔧 Advanced Usage
+
+### Discover Alternative Endpoints
+
+```bash
+python discover_endpoint.py
+```
+
+Finds alternative GIS service endpoints automatically.
+
+### Custom Polygon Area
+
+```python
+# test_scraper.py
+test_polygon = {
+    "type": "Polygon",
+    "coordinates": [
+        [[-97.58, 31.78], [-97.56, 31.78],
+         [-97.56, 31.80], [-97.58, 31.80],
+         [-97.58, 31.78]]
+    ]
 }
 ```
 
 ### Load in QGIS
 
 1. Open QGIS
-2. Layer → Add Layer → Add Vector Layer
+2. **Layer → Add Layer → Add Vector Layer**
 3. Select `output/bosque_parcels_*.geojson`
-4. Style by `status` field
+4. Style by `status` field (solar/lease/open)
 5. Add basemap for context
 
-## Rate Limiting & Ethics
+---
 
-- **Rate limit:** 0.5s between requests (configurable)
-- **Retry logic:** 3 attempts with exponential backoff
-- **Public data only:** All sources are public records
-- **Respectful scraping:** Adheres to reasonable use policies
+## 📊 Use Cases
 
-## Troubleshooting
+<table>
+<tr>
+<td width="50%">
+
+### 🏭 Energy Development
+- Track solar farm development
+- Monitor leasing activity
+- Identify open land clusters
+- Phase planning analysis
+
+</td>
+<td width="50%">
+
+### 🏢 Real Estate Intelligence
+- Data center corridor analysis
+- Transmission easement mapping
+- Land aggregation opportunities
+- Ownership pattern research
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 📈 Investment Due Diligence
+- Property research
+- Market analysis
+- Competitive landscape
+- Strategic acquisitions
+
+</td>
+<td width="50%">
+
+### 🔍 Public Records Access
+- County transparency
+- Development tracking
+- Parcel ownership history
+- Zoning & land use
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🌟 GitHub Pages Deployment
+
+### Setup (One Time)
+
+1. **Enable GitHub Pages**
+   - Go to **Settings → Pages**
+   - Source: **Deploy from a branch**
+   - Branch: **`main`**
+   - Folder: **`/docs`**
+   - Click **Save**
+
+2. **Generate Initial Data**
+   ```bash
+   python test_scraper.py
+   ```
+
+3. **Deploy**
+   ```bash
+   git add docs/data/parcels.geojson
+   git commit -m "Add parcel data"
+   git push
+   ```
+
+4. **Access Site** (within 2 minutes)
+   ```
+   https://[username].github.io/bosqueTriangle/
+   ```
+
+### Update Data
+
+```bash
+# Re-run scraper (updates docs/data/parcels.geojson)
+python scraper.py
+
+# Deploy update
+git add docs/data/parcels.geojson
+git commit -m "Update parcel data - $(date +%Y-%m-%d)"
+git push
+```
+
+**See:** [GITHUB_PAGES.md](GITHUB_PAGES.md) for complete guide
+
+---
+
+## 🛠️ Development
+
+### Run Tests
+
+```bash
+# Small area test (~50 parcels)
+python test_scraper.py
+
+# Verify outputs
+ls -lh output/
+ls -lh docs/data/
+```
+
+### Adding Data Sources
+
+1. Add source to `config.json`
+2. Update `field_mappings` if needed
+3. Test with `test_scraper.py`
+4. Run full scrape
+
+---
+
+## 🔒 Rate Limiting & Ethics
+
+- ✅ **Rate limit:** 0.5s between requests
+- ✅ **Retry logic:** 3 attempts with exponential backoff
+- ✅ **Public data only:** All sources are public records
+- ✅ **Respectful scraping:** Adheres to ToS and reasonable use
+
+---
+
+## 🚦 Troubleshooting
 
 ### No data returned
 
 ```bash
-# Test endpoint connectivity
-python discover_endpoint.py
-```
-
-### Import errors
-
-```bash
-# Reinstall dependencies
-pip install -r requirements.txt --upgrade
+python discover_endpoint.py  # Test connectivity
 ```
 
 ### Web interface shows demo data
 
 ```bash
-# Run scraper first to generate data
-python test_scraper.py
-python web_server.py
+python test_scraper.py       # Generate real data
 ```
 
-### Playwright browser issues
+### Import errors
 
 ```bash
-# Reinstall browser
+pip install -r requirements.txt --upgrade
+```
+
+### Playwright issues
+
+```bash
 playwright install --force chromium
 ```
 
-## Development
+---
 
-### Running Tests
+## 📈 Performance
 
-```bash
-# Test small area (10-50 parcels)
-python test_scraper.py
-
-# Verify outputs exist
-ls -lh output/
-```
-
-### Adding New Data Sources
-
-1. Add source to `config.json` under `data_sources`
-2. Update field mappings if needed
-3. Test with `test_scraper.py`
-4. Run full scrape with `scraper.py`
-
-## Technical Details
-
-**Language:** Python 3.9+
-**REST API:** Requests library
-**GIS:** Shapely for spatial operations
-**Web:** Flask + Leaflet.js
-**Browser Automation:** Playwright (optional)
-
-**Performance:**
-- ~1000 parcels per request
-- ~2 requests per second (with rate limiting)
-- Full scrape completes in 5-10 minutes
-
-## License
-
-This project is for authorized real estate research and analysis. All parcel data remains property of respective county appraisal districts and the State of Texas.
-
-## Contact
-
-**H.H.H. Holdings**
-For investment inquiries: holdings@hhh.com
+| Metric | Value |
+|--------|-------|
+| Records per request | ~1,000 |
+| Requests per second | ~2 (with rate limiting) |
+| Full scrape time | 5-10 minutes |
+| GitHub Pages load | < 2 seconds globally |
+| Cost | $0 (free hosting) |
 
 ---
 
-**For Bevans Real Estate** - Property research and data center corridor analysis in Central Texas.
+## 📋 Requirements
 
-Built with ❤️ for strategic land acquisition and transparency in public records.
+- **Python:** 3.9+
+- **Libraries:** requests, shapely, pandas, flask, playwright
+- **Optional:** QGIS for advanced visualization
+- **Hosting:** GitHub Pages (free, unlimited views)
+
+---
+
+## 📝 License
+
+This project is for authorized real estate research and analysis. All parcel data remains property of respective county appraisal districts and the State of Texas.
+
+---
+
+## 📧 Contact
+
+<div align="center">
+
+### H.H.H. Holdings
+
+**For investment inquiries:**
+📧 holdings@hhh.com
+
+---
+
+**Built for Bevans Real Estate**
+*Property research and data center corridor analysis in Central Texas*
+
+[![GitHub](https://img.shields.io/badge/GitHub-bosqueTriangle-black?logo=github)](https://github.com/williambevans/bosqueTriangle)
+[![Website](https://img.shields.io/badge/Website-Live%20Demo-blue)](https://williambevans.github.io/bosqueTriangle/)
+
+</div>
+
+---
+
+<div align="center">
+
+**Built with ❤️ for strategic land acquisition and transparency in public records**
+
+*Track development • Identify opportunities • Make informed decisions*
+
+</div>

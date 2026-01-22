@@ -1,0 +1,233 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "phase",
+        "name": "PHASE 1",
+        "capacity": "3342 MW",
+        "status": "solar_developed"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-97.50, 31.85],
+          [-97.45, 31.88],
+          [-97.42, 31.84],
+          [-97.47, 31.81],
+          [-97.50, 31.85]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "phase",
+        "name": "PHASE 2",
+        "capacity": "3342 MW",
+        "status": "active_lease"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-97.45, 31.88],
+          [-97.38, 31.92],
+          [-97.35, 31.88],
+          [-97.42, 31.84],
+          [-97.45, 31.88]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "phase",
+        "name": "PHASE 4",
+        "capacity": "2705 MW",
+        "status": "open"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-97.50, 31.77],
+          [-97.45, 31.80],
+          [-97.42, 31.76],
+          [-97.47, 31.73],
+          [-97.50, 31.77]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "poi",
+        "name": "POI-1",
+        "capacity": "3342V PRIMARY",
+        "description": "Cap: 3 GW / MW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-97.40, 31.86]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "poi",
+        "name": "POI-2",
+        "capacity": "345kV PRIMARY",
+        "description": "Cap: 3 GW / MW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-97.43, 31.78]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "poi",
+        "name": "POI-3",
+        "capacity": "345kV TE",
+        "description": "Cap: 2,500 MW / 2500 MW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-97.48, 31.82]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "poi",
+        "name": "POI-4",
+        "capacity": "138kV 76MW",
+        "description": "Cap: 190 MW / 1600 MW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-97.47, 31.87]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "substation",
+        "name": "CLIFTON SUB",
+        "status": "138.066kV - EXISTING"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-97.52, 31.78]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "substation",
+        "name": "WHITNEY SUB",
+        "status": "345kV | 138kV - EXISTING"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-97.35, 31.91]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "collector",
+        "name": "CENTRAL COLLECTOR",
+        "status": "PROPOSED 345kV"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-97.45, 31.82]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "collector",
+        "name": "SOUTH COLLECTOR",
+        "status": "PROPOSED 345kV"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-97.45, 31.75]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "city",
+        "name": "Meridian"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-97.55, 31.83]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "city",
+        "name": "Clifton"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-97.57, 31.77]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "transmission_line",
+        "name": "345kV Line",
+        "voltage": "345kV"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-97.60, 31.70],
+          [-97.45, 31.82],
+          [-97.35, 31.91],
+          [-97.25, 31.95]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "transmission_line",
+        "name": "138kV Line West",
+        "voltage": "138kV"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-97.62, 31.83],
+          [-97.52, 31.78],
+          [-97.45, 31.75]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "transmission_line",
+        "name": "138kV Line North",
+        "voltage": "138kV"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-97.48, 31.87],
+          [-97.42, 31.90],
+          [-97.35, 31.91]
+        ]
+      }
+    }
+  ]
+}
