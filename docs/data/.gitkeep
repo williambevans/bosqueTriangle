@@ -1,0 +1,2 @@
+# This directory contains parcel data for GitHub Pages
+# Run python scraper.py or python test_scraper.py to generate parcels.geojson

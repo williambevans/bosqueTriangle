@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bosque County - Integrated Energy & Compute Zone</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 2rem 3rem;
+            background: linear-gradient(180deg, rgba(26,26,26,0.95) 0%, rgba(26,26,26,0) 100%);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+        }
+
+        .logo .company {
+            color: #c4a661;
+            font-weight: 400;
+        }
+
+        .request-deck-btn {
+            background-color: #c4a661;
+            color: #1a1a1a;
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .request-deck-btn:hover {
+            background-color: #d4b671;
+        }
+
+        .subtitle {
+            color: #808080;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.5rem 1rem;
+            border: 1px solid #404040;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .subtitle::before {
+            content: "●";
+            color: #c4a661;
+            margin-right: 0.75rem;
+        }
+
+        .title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .title .highlight {
+            color: #c4a661;
+        }
+
+        /* Map Container */
+        #map {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Stats Panel */
+        .stats-panel {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(0deg, rgba(26,26,26,0.98) 60%, rgba(26,26,26,0) 100%);
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            position: relative;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #808080;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .stat-underline {
+            width: 60px;
+            height: 3px;
+            background-color: #c4a661;
+            margin-top: 0.75rem;
+        }
+
+        /* Progress Bars */
+        .progress-section {
+            margin-top: 2rem;
+        }
+
+        .progress-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-label {
+            font-size: 1rem;
+            color: #ffffff;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-value {
+            font-size: 1rem;
+            color: #c4a661;
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: #2a2a2a;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            transition: width 1s ease-out;
+            border-radius: 4px;
+        }
+
+        .progress-solar {
+            background: linear-gradient(90deg, #c4a661 0%, #d4b671 100%);
+        }
+
+        .progress-lease {
+            background: linear-gradient(90deg, #808080 0%, #a0a0a0 100%);
+        }
+
+        .progress-open {
+            background: linear-gradient(90deg, #404040 0%, #606060 100%);
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(26, 26, 26, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            font-size: 1.5rem;
+            color: #c4a661;
+            letter-spacing: 0.2em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .header {
+                padding: 1.5rem;
+            }
+
+            .stats-panel {
+                padding: 2rem 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+        }
+
+        /* Custom Leaflet Popup */
+        .leaflet-popup-content-wrapper {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .leaflet-popup-content {
+            margin: 1rem;
+            font-family: 'Georgia', serif;
+        }
+
+        .popup-title {
+            color: #c4a661;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .popup-detail {
+            color: #cccccc;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .popup-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 2px;
+        }
+
+        .status-solar {
+            background-color: #c4a661;
+            color: #1a1a1a;
+        }
+
+        .status-lease {
+            background-color: #808080;
+            color: #ffffff;
+        }
+
+        .status-open {
+            background-color: #404040;
+            color: #ffffff;
+        }
+
+        .leaflet-popup-tip {
+            background-color: #2a2a2a;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader">LOADING PARCEL DATA...</div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <div class="logo">
+                    <div>H.H.H.</div>
+                    <div class="company">Holdings</div>
+                </div>
+                <button class="request-deck-btn" onclick="requestDeck()">REQUEST DECK</button>
+            </div>
+
+            <div class="subtitle">CONFIDENTIAL INVESTMENT MEMORANDUM</div>
+
+            <h1 class="title">
+                Central Texas<br>
+                <span class="highlight">Integrated</span><br>
+                <span class="highlight">Energy</span> &<br>
+                Commute Zone
+            </h1>
+        </div>
+
+        <!-- Map -->
+        <div id="map"></div>
+
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalAcres">130K</div>
+                    <div class="stat-label">Total Acres</div>
+                    <div class="stat-underline"></div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalParcels">--</div>
+                    <div class="stat-label">Total Parcels</div>
+                    <div class="stat-underline"></div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="subdivisions">--</div>
+                    <div class="stat-label">Subdivisions</div>
+                    <div class="stat-underline"></div>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <div class="progress-label">Solar Developed</div>
+                        <div class="progress-value" id="solarPercent">0%</div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar progress-solar" id="solarBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <div class="progress-label">Active Leases</div>
+                        <div class="progress-value" id="leasePercent">0%</div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar progress-lease" id="leaseBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <div class="progress-label">Open Land</div>
+                        <div class="progress-value" id="openPercent">0%</div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar progress-open" id="openBar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // Initialize map centered on Bosque County
+        const map = L.map('map', {
+            center: [31.8, -97.42],
+            zoom: 11,
+            zoomControl: true,
+            attributionControl: false
+        });
+
+        // Dark tile layer
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Target triangle boundary
+        const targetPolygon = [
+            [31.7823, -97.5769], // Clifton (SW)
+            [31.9508, -97.3618], // Lake Whitney (N)
+            [31.7234, -97.2891], // McLennan/Hwy 6 (SE)
+            [31.7823, -97.5769]  // Close polygon
+        ];
+
+        // Draw target area boundary
+        const boundary = L.polygon(targetPolygon, {
+            color: '#c4a661',
+            weight: 3,
+            fillColor: '#c4a661',
+            fillOpacity: 0.1,
+            dashArray: '10, 10'
+        }).addTo(map);
+
+        // Fit map to boundary
+        map.fitBounds(boundary.getBounds(), { padding: [50, 50] });
+
+        // Load parcel data from static file
+        async function loadParcelData() {
+            try {
+                // Try to load static GeoJSON data file
+                const response = await fetch('data/parcels.geojson');
+
+                if (!response.ok) {
+                    // Show demo data if file not found
+                    showDemoData();
+                    return;
+                }
+
+                const geojson = await response.json();
+                displayParcels(geojson);
+
+            } catch (error) {
+                console.log('Loading demo data (run scraper.py to generate real data)');
+                showDemoData();
+            }
+        }
+
+        function displayParcels(geojson) {
+            const stats = {
+                total: 0,
+                solar: 0,
+                lease: 0,
+                open: 0,
+                acres: 0,
+                subdivisions: new Set()
+            };
+
+            L.geoJSON(geojson, {
+                style: function(feature) {
+                    const status = feature.properties.status;
+                    let color = '#404040';
+                    let fillOpacity = 0.6;
+
+                    if (status === 'solar_developed') {
+                        color = '#c4a661';
+                        fillOpacity = 0.8;
+                    } else if (status === 'active_lease') {
+                        color = '#808080';
+                        fillOpacity = 0.7;
+                    }
+
+                    return {
+                        color: color,
+                        weight: 1,
+                        fillColor: color,
+                        fillOpacity: fillOpacity
+                    };
+                },
+                onEachFeature: function(feature, layer) {
+                    const props = feature.properties;
+
+                    // Update stats
+                    stats.total++;
+                    stats.acres += props.acreage || 0;
+                    stats.subdivisions.add(props.subdivision);
+
+                    if (props.status === 'solar_developed') stats.solar++;
+                    else if (props.status === 'active_lease') stats.lease++;
+                    else stats.open++;
+
+                    // Create popup
+                    const statusClass = props.status === 'solar_developed' ? 'status-solar' :
+                                       props.status === 'active_lease' ? 'status-lease' : 'status-open';
+                    const statusText = props.status === 'solar_developed' ? 'Solar Developed' :
+                                      props.status === 'active_lease' ? 'Active Lease' : 'Open Land';
+
+                    const popupContent = `
+                        <div class="popup-title">${props.owner || 'Unknown Owner'}</div>
+                        <div class="popup-detail"><strong>Parcel:</strong> ${props.parcel_id}</div>
+                        <div class="popup-detail"><strong>Acres:</strong> ${(props.acreage || 0).toFixed(2)}</div>
+                        <div class="popup-detail"><strong>Subdivision:</strong> ${props.subdivision || 'N/A'}</div>
+                        ${props.situs_address ? `<div class="popup-detail"><strong>Address:</strong> ${props.situs_address}</div>` : ''}
+                        <div class="popup-status ${statusClass}">${statusText}</div>
+                    `;
+
+                    layer.bindPopup(popupContent);
+                }
+            }).addTo(map);
+
+            updateStats(stats);
+            hideLoading();
+        }
+
+        function showDemoData() {
+            // Demo data for visualization when real data not available
+            const demoStats = {
+                total: 847,
+                solar: 42,
+                lease: 156,
+                open: 649,
+                acres: 130000,
+                subdivisions: new Set(['Clifton Ranch', 'Lake Whitney Estates', 'Valley Mills', 'Meridian Acres'])
+            };
+
+            updateStats(demoStats);
+            hideLoading();
+        }
+
+        function updateStats(stats) {
+            // Format numbers with commas
+            document.getElementById('totalAcres').textContent = stats.acres.toLocaleString('en-US', { maximumFractionDigits: 0 });
+            document.getElementById('totalParcels').textContent = stats.total.toLocaleString('en-US');
+            document.getElementById('subdivisions').textContent = stats.subdivisions.size;
+
+            // Calculate percentages
+            const solarPct = stats.total > 0 ? (stats.solar / stats.total * 100) : 0;
+            const leasePct = stats.total > 0 ? (stats.lease / stats.total * 100) : 0;
+            const openPct = stats.total > 0 ? (stats.open / stats.total * 100) : 0;
+
+            // Update progress bars with animation
+            setTimeout(() => {
+                document.getElementById('solarBar').style.width = solarPct + '%';
+                document.getElementById('leaseBar').style.width = leasePct + '%';
+                document.getElementById('openBar').style.width = openPct + '%';
+
+                document.getElementById('solarPercent').textContent = solarPct.toFixed(1) + '%';
+                document.getElementById('leasePercent').textContent = leasePct.toFixed(1) + '%';
+                document.getElementById('openPercent').textContent = openPct.toFixed(1) + '%';
+            }, 100);
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+
+        function requestDeck() {
+            alert('Contact: holdings@hhh.com for full investment memorandum');
+        }
+
+        // Initialize
+        loadParcelData();
+    </script>
+</body>
+</html>
