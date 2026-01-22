@@ -564,7 +564,144 @@
             alert('Contact: holdings@hhh.com for full investment memorandum');
         }
 
+        // Load infrastructure data (phases, POIs, substations)
+        async function loadInfrastructure() {
+            try {
+                const response = await fetch('data/infrastructure.geojson');
+                if (response.ok) {
+                    const geojson = await response.json();
+                    displayInfrastructure(geojson);
+                }
+            } catch (error) {
+                console.log('Infrastructure data not found, showing basic map');
+            }
+        }
+
+        function displayInfrastructure(geojson) {
+            L.geoJSON(geojson, {
+                pointToLayer: function(feature, latlng) {
+                    const props = feature.properties;
+
+                    // POI markers (orange circles)
+                    if (props.type === 'poi') {
+                        return L.circleMarker(latlng, {
+                            radius: 10,
+                            fillColor: '#ff8800',
+                            color: '#ff8800',
+                            weight: 2,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        });
+                    }
+
+                    // Substation markers (green diamonds)
+                    if (props.type === 'substation') {
+                        const icon = L.divIcon({
+                            className: 'substation-marker',
+                            html: '<div style="width:16px;height:16px;background:#00ff88;transform:rotate(45deg);border:2px solid #00ff88;"></div>',
+                            iconSize: [16, 16]
+                        });
+                        return L.marker(latlng, { icon });
+                    }
+
+                    // Collector markers (orange dashed squares)
+                    if (props.type === 'collector') {
+                        const icon = L.divIcon({
+                            className: 'collector-marker',
+                            html: '<div style="width:14px;height:14px;border:2px dashed #ff8800;background:transparent;"></div>',
+                            iconSize: [14, 14]
+                        });
+                        return L.marker(latlng, { icon });
+                    }
+
+                    // City labels
+                    if (props.type === 'city') {
+                        const icon = L.divIcon({
+                            className: 'city-label',
+                            html: `<div style="color:#888;font-size:11px;font-family:Georgia;white-space:nowrap;">${props.name}</div>`,
+                            iconSize: [50, 20]
+                        });
+                        return L.marker(latlng, { icon });
+                    }
+
+                    return L.marker(latlng);
+                },
+                style: function(feature) {
+                    const props = feature.properties;
+
+                    // Phase polygons
+                    if (props.type === 'phase') {
+                        let fillColor = '#c4a661';
+                        let fillOpacity = 0.4;
+
+                        if (props.status === 'solar_developed') {
+                            fillColor = '#c4a661';
+                            fillOpacity = 0.6;
+                        } else if (props.status === 'active_lease') {
+                            fillColor = '#808080';
+                            fillOpacity = 0.5;
+                        } else if (props.status === 'open') {
+                            fillColor = '#606060';
+                            fillOpacity = 0.3;
+                        }
+
+                        return {
+                            color: '#ff8800',
+                            weight: 2,
+                            fillColor: fillColor,
+                            fillOpacity: fillOpacity,
+                            dashArray: '5, 5'
+                        };
+                    }
+
+                    // Transmission lines
+                    if (props.type === 'transmission_line') {
+                        const color = props.voltage === '345kV' ? '#00ccff' : '#ff8800';
+                        return {
+                            color: color,
+                            weight: 3,
+                            opacity: 0.8
+                        };
+                    }
+
+                    return {
+                        color: '#c4a661',
+                        weight: 2
+                    };
+                },
+                onEachFeature: function(feature, layer) {
+                    const props = feature.properties;
+
+                    // Create popups for infrastructure features
+                    if (props.type === 'phase') {
+                        layer.bindPopup(`
+                            <div class="popup-title">${props.name}</div>
+                            <div class="popup-detail"><strong>Capacity:</strong> ${props.capacity}</div>
+                            <div class="popup-detail"><strong>Status:</strong> ${props.status.replace('_', ' ').toUpperCase()}</div>
+                        `);
+                    } else if (props.type === 'poi') {
+                        layer.bindPopup(`
+                            <div class="popup-title">${props.name}</div>
+                            <div class="popup-detail"><strong>Capacity:</strong> ${props.capacity}</div>
+                            <div class="popup-detail">${props.description}</div>
+                        `);
+                    } else if (props.type === 'substation') {
+                        layer.bindPopup(`
+                            <div class="popup-title">${props.name}</div>
+                            <div class="popup-detail">${props.status}</div>
+                        `);
+                    } else if (props.type === 'collector') {
+                        layer.bindPopup(`
+                            <div class="popup-title">${props.name}</div>
+                            <div class="popup-detail">${props.status}</div>
+                        `);
+                    }
+                }
+            }).addTo(map);
+        }
+
         // Initialize
+        loadInfrastructure();  // Load infrastructure first (shows underneath parcels)
         loadParcelData();
     </script>
 </body>
