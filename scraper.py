@@ -410,6 +410,14 @@ def main():
     scraper.export_geojson(str(geojson_path))
     scraper.export_csv(str(csv_path))
 
+    # Export for GitHub Pages
+    github_pages_dir = Path("docs/data")
+    github_pages_dir.mkdir(parents=True, exist_ok=True)
+    github_pages_geojson = github_pages_dir / "parcels.geojson"
+
+    scraper.export_geojson(str(github_pages_geojson))
+    print(f"✓ Exported for GitHub Pages: {github_pages_geojson}")
+
     print("\n✓ Complete!")
     return 0
 

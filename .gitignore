@@ -11,9 +11,12 @@ ENV/
 
 # Output data files
 output/
-*.geojson
-*.csv
 discovered_endpoints.json
+
+# Ignore data files except in docs/data (for GitHub Pages)
+*.geojson
+!docs/data/*.geojson
+*.csv
 
 # IDE
 .vscode/

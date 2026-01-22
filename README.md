@@ -64,7 +64,19 @@ Output files saved to `output/` directory:
 
 ### Launch Web Viewer
 
-View interactive map with progress bars:
+**Option 1: GitHub Pages (Recommended)**
+
+The site is automatically deployed to GitHub Pages at:
+**https://williambevans.github.io/bosqueTriangle/**
+
+To update the data:
+1. Run `python test_scraper.py` or `python scraper.py`
+2. Commit and push the generated `docs/data/parcels.geojson`
+3. Site updates automatically
+
+**Option 2: Local Flask Server**
+
+View locally with Flask:
 
 ```bash
 python web_server.py
@@ -179,6 +191,51 @@ params = {
     'resultRecordCount': 1000
 }
 ```
+
+## GitHub Pages Deployment
+
+This project is configured for automatic deployment to GitHub Pages.
+
+### Setup
+
+1. **Enable GitHub Pages** in your repository settings:
+   - Go to Settings → Pages
+   - Source: Deploy from branch
+   - Branch: `main` (or your default branch)
+   - Folder: `/docs`
+   - Save
+
+2. **Run the scraper** to generate data:
+   ```bash
+   python test_scraper.py  # or python scraper.py
+   ```
+
+3. **Commit and push** the generated data:
+   ```bash
+   git add docs/data/parcels.geojson
+   git commit -m "Add parcel data"
+   git push
+   ```
+
+4. **Access your site**:
+   - URL: `https://[username].github.io/bosqueTriangle/`
+   - Example: https://williambevans.github.io/bosqueTriangle/
+
+### Updating Data
+
+To refresh the map with new parcel data:
+
+```bash
+# Re-run scraper
+python scraper.py
+
+# Push updates
+git add docs/data/parcels.geojson
+git commit -m "Update parcel data"
+git push
+```
+
+Site updates automatically within 1-2 minutes.
 
 ## Configuration
 

@@ -49,6 +49,14 @@ def test_small_area():
         scraper.export_json(str(test_json))
         scraper.export_geojson(str(test_geojson))
 
+        # Export for GitHub Pages
+        github_pages_dir = Path("docs/data")
+        github_pages_dir.mkdir(parents=True, exist_ok=True)
+        github_pages_geojson = github_pages_dir / "parcels.geojson"
+
+        scraper.export_geojson(str(github_pages_geojson))
+        print(f"✓ Exported for GitHub Pages: {github_pages_geojson}")
+
         print(f"\n✓ Test complete - check {test_geojson} in QGIS to verify")
         return 0
     else:
