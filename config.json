@@ -1,0 +1,55 @@
+{
+  "project": {
+    "name": "Bosque County Parcel Scraper",
+    "description": "Extract parcels in triangle bounded by Hwy 22, Hwy 6, and McLennan County line",
+    "county": "Bosque",
+    "state": "TX"
+  },
+  "target_polygon": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [-97.5769, 31.7823],
+        [-97.3618, 31.9508],
+        [-97.2891, 31.7234],
+        [-97.5769, 31.7823]
+      ]
+    ],
+    "crs": "EPSG:4326",
+    "description": "Clifton (SW), Lake Whitney (N), McLennan/Hwy 6 (SE)"
+  },
+  "data_sources": {
+    "primary": {
+      "name": "TNRIS Statewide Parcels",
+      "url": "https://feature.stratmap.tnris.org/arcgis/rest/services/Parcels/StratMap_Parcels/MapServer/0",
+      "type": "arcgis_rest"
+    },
+    "fallback": {
+      "name": "Bosque CAD True Automation",
+      "url": "https://esearch.bosquecad.com/",
+      "type": "web_scraper"
+    }
+  },
+  "scraper_settings": {
+    "rate_limit_seconds": 0.5,
+    "max_records_per_request": 1000,
+    "retry_attempts": 3,
+    "timeout_seconds": 30,
+    "save_partial_on_interrupt": true
+  },
+  "field_mappings": {
+    "parcel_id": ["PARCEL_ID", "ParcelID", "PIN", "GEO_ID", "PROP_ID", "ACCT"],
+    "owner": ["OWNER", "OWNER_NAME", "OwnerName", "OWNERNAME1"],
+    "acreage": ["ACRES", "Acreage", "GIS_ACRES", "CALC_ACRES"],
+    "subdivision": ["SUBDIV", "SUBDIVISION", "SUB_NAME", "PLAT_NAME", "PLATNAME"],
+    "situs_address": ["SITUS_ADDR", "SITUS_ADDRESS", "SitusAddress", "PROP_ADDR"],
+    "legal_description": ["LEGAL_DESC", "LEGAL", "LegalDesc", "LEGALDESC"],
+    "market_value": ["MARKET_VAL", "MARKET_VALUE", "MKT_VALUE", "APPR_VAL"],
+    "owner_address": ["MAIL_ADDR", "OWNER_ADDR", "MailAddress", "OWNADDR"]
+  },
+  "output": {
+    "directory": "output",
+    "formats": ["json", "geojson", "csv"],
+    "timestamp_format": "%Y%m%d_%H%M%S"
+  }
+}
